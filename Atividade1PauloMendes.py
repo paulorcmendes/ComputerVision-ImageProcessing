@@ -2,7 +2,7 @@
 """
 Created on Wed Sep  5 09:56:37 2018
 
-@author: paulo
+@author: paulo rebato conceicao mendes
 """
 import numpy as np
 import cv2, os, math, copy
@@ -13,8 +13,7 @@ def amostragem(img, n):
 	return np.array(amostra)
 
 def quantizacao(img, k):
-	img = np.float32(img)
-	quantized = img.copy()
+	quantized = copy.deepcopy(img)
 	
 	rows = img.shape[0] #qtd de linhas
 	cols = img.shape[1] #qtd de colunas
@@ -84,13 +83,13 @@ def opAritmeticas(img1, img2, op):
 	###OPERAÇÕES
 	for i in range(rows):
 		for j in range(cols):
-			if(op == '+'):
+			if(op == 'SOMA'):
 				result[i,j] = list(np.array(img1[i,j]) + np.array(img2[i,j]))
-			if(op == '-'):
+			if(op == 'SUB'):
 				result[i,j] = list(np.array(img1[i,j]) - np.array(img2[i,j]))
-			if(op == '*'):
+			if(op == 'MULT'):
 				result[i,j] = list(np.array(img1[i,j]) * np.array(img2[i,j]))
-			if(op == '/'):
+			if(op == 'DIV'):
 				if(img2[i,j][BLUE] != 0):
 					result[i,j][BLUE] = int(img1[i,j][BLUE]/img2[i,j][BLUE])
 				else:
@@ -189,66 +188,64 @@ def rotacao(img, teta):
 	return result
 
 
+if not os.path.exists('ImagensResultantes'):
+    os.makedirs('ImagensResultantes')
 ##############AMOSTRAGEM#################
 '''
-file = 'planta.jpg'
+file = 'rogerinho.jpg'
 img = cv2.imread(file, 0)
-ft = 2
+ft = 3
 amostra = amostragem(img, ft)
 
-cv2.imshow('amostragem', amostra)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+cv2.imwrite('ImagensResultantes/AMOSTRAGEM_FATOR_{ft}.jpg'.format(ft = ft),amostra)
 '''
 ##############QUANTIZACAO#################
 '''
-file = 'planta.jpg'
+file = 'rogerinho.jpg'
 img = cv2.imread(file, 0)
 k = 2
 quant = quantizacao(img, k)
-cv2.imshow('quantized', quant)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+
+cv2.imwrite('ImagensResultantes/QUANTIZACAO_2^{K}.jpg'.format(K = k),quant)
 '''
 #############OPERAÇÕES LÓGICAS###########
 '''
-file1 = 'opLog1.jpg'
+file1 = 'teste1.jpg'
 img1 = cv2.imread(file1, 0)
-file2 = 'opLog2.jpg'
+file2 = 'teste2.jpg'
 img2 = cv2.imread(file2, 0)
-op = "NOT"
+op = "NOT" #Troque pela operação lógica desejada (AND, OR, XOR, NOT)
 opLog = opLogicas(img1, img2, op)
-cv2.imshow(op, opLog)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+
+cv2.imwrite('ImagensResultantes/OPLOG_{op}.jpg'.format(op = op),opLog)
 '''
 #############OPERAÇÕES ARITMÉTICAS###########
 '''
-file1 = 'flor.jpg'
+file1 = 'shape.jpg'
 img1 = cv2.imread(file1, 1)
 file2 = 'rogerinho.jpg'
 img2 = cv2.imread(file2, 1)
 
-op = '+'
-#op = '-'
-#op = '*'
-#op = '/'
+#op = 'SOMA'
+#op = 'SUB'
+#op = 'MULT'
+#op = 'DIV'
 
 opArit = opAritmeticas(img1, img2, op)
-cv2.imshow(op, opArit)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+
+cv2.imwrite('ImagensResultantes/OP_ARIT_{op}.jpg'.format(op = op),opArit)
 '''
 ############ MISTURA ######################
 '''
-file1 = 'flor.jpg'
+file1 = 'shape.jpg'
 img1 = cv2.imread(file1, 1)
 file2 = 'rogerinho.jpg'
 img2 = cv2.imread(file2, 1)
+alfa = 5
+beta = 3
+mist = mistura(img1, alfa, img2, beta)
 
-mist = mistura(img1, 0, img2, 5)
-cv2.imshow('mistura', mist)
-
+cv2.imwrite('ImagensResultantes/MISTURA_ALFA{alfa}_BETA{beta}.jpg'.format(alfa = alfa, beta = beta),mist)
 '''
 ############ DISTANCIA EUCLIDIANA #########
 '''
@@ -261,29 +258,29 @@ print(distanciaEuclidiana(pontoA, pontoB))
 '''
 file = 'rogerinho.jpg'
 img = cv2.imread(file, 1)
+x = 100
+y = 200
+trans = translacao(img, [x,y])
 
-trans = translacao(img, [100, 200])
-cv2.imshow('translacao', trans)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+cv2.imwrite('ImagensResultantes/TRANS_X{x}_Y{y}.jpg'.format(x = x, y = y),trans)
 '''
 
 ########### ESCALA ####################
 '''
 file = 'rogerinho.jpg'
 img = cv2.imread(file, 1)
+x = 0.2
+y = 0.4
+esc = escala(img, [x, y])
 
-esc = escala(img, [1, 0.3])
-cv2.imshow('escala', esc)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+cv2.imwrite('ImagensResultantes/ESCALA_X{x}_Y{y}.jpg'.format(x = x, y = y),esc)
 '''
 ########### ROTACAO ####################
-
+'''
 file = 'rogerinho.jpg'
 img = cv2.imread(file, 1)
+graus = -45
+rot = rotacao(img, math.radians(graus))
 
-rot = rotacao(img, math.radians(-45))
-cv2.imshow('rotacao', rot)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+cv2.imwrite('ImagensResultantes/ROTACAO_{graus}GRAUS.jpg'.format(graus = graus),rot)
+'''
