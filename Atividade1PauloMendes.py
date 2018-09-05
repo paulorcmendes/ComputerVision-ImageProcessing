@@ -77,15 +77,7 @@ def opAritmeticas(img1, img2, op):
 	img1 = np.float32(img1)
 	img2 = np.float32(img2)
 
-	rows = img1.shape[0]
-	if rows > img2.shape[0]:
-		rows = img2.shape[0]
-		
-	cols = img1.shape[1]
-	if cols > img2.shape[1]:
-		cols = img2.shape[1]
-
-	canais = img1.shape[2]
+	rows, cols, canais = img1.shape
 	
 	result = np.zeros((rows, cols, canais),np.uint8)
 
@@ -129,7 +121,29 @@ def opAritmeticas(img1, img2, op):
 			if(result[i,j][RED] < 0):
 				result[i,j][RED] = 0
 	return result
+
+def mistura(img1, alfa, img2, beta):
+	BLUE = 0 #blue
+	RED = 1 #red
+	GREEN = 2 #green
+	img1 = np.float32(img1)
+	img2 = np.float32(img2)
+	rows, cols, canais = img1.shape
 	
+	result = np.zeros((rows, cols, canais),np.uint8)
+
+	for i in range(rows):
+		for j in range(cols):
+			result[i,j] = list(np.array(img1[i,j])*(alfa/(alfa+beta)) + np.array(img2[i,j])*(beta/(alfa+beta)))
+
+			#############arrumando###############
+			if(result[i,j][BLUE] > 255):
+				result[i,j][BLUE] = 255
+			if(result[i,j][GREEN] > 255):
+				result[i,j][GREEN] = 255
+			if(result[i,j][RED] > 255):
+				result[i,j][RED] = 255
+	return result
 
 #file = 'planta.jpg'
 #img = cv2.imread(file, 0)
@@ -163,18 +177,30 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 '''
 #############OPERAÇÕES ARITMÉTICAS###########
+'''
+file1 = 'flor.jpg'
+img1 = cv2.imread(file1, 1)
+file2 = 'rogerinho.jpg'
+img2 = cv2.imread(file2, 1)
+
+op = '+'
+#op = '-'
+#op = '*'
+#op = '/'
+
+opArit = opAritmeticas(img1, img2, op)
+cv2.imshow(op, opArit)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+'''
+############ MISTURA ######################
 
 file1 = 'flor.jpg'
 img1 = cv2.imread(file1, 1)
 file2 = 'rogerinho.jpg'
 img2 = cv2.imread(file2, 1)
 
-#op = '+'
-#op = '-'
-#op = '*'
-op = '/'
-
-opArit = opAritmeticas(img1, img2, op)
-cv2.imshow(op, opArit)
+mist = mistura(img1, 0, img2, 5)
+cv2.imshow('mistura', mist)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
