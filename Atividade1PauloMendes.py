@@ -145,10 +145,54 @@ def mistura(img1, alfa, img2, beta):
 				result[i,j][RED] = 255
 	return result
 
-#file = 'planta.jpg'
-#img = cv2.imread(file, 0)
+def distanciaEuclidiana(A, B):
+	diferenca = list(np.array(A) - np.array(B))
+	return math.sqrt(pow(diferenca[0],2) + pow(diferenca[1],2))
+
+def translacao(img, vector):
+	rows, cols, canais = img.shape	
+	result = np.zeros((rows, cols, canais),np.uint8)
+
+	for i in range(rows):
+		for j in range(cols):
+			nX = i+vector[0]
+			nY = j+vector[1]
+
+			if(nX >= 0 and nX<rows and nY >= 0 and nY<cols):
+				result[nX, nY] = img[i,j]
+	return result
+
+def escala(img, vector):
+	rows, cols, canais = img.shape	
+	result = np.zeros((rows, cols, canais),np.uint8)
+
+	for i in range(rows):
+		for j in range(cols):
+			nX = int(i*vector[0])
+			nY = int(j*vector[1])
+
+			if(nX >= 0 and nX<rows and nY >= 0 and nY<cols):
+				result[nX, nY] = img[i,j]
+	return result
+
+def rotacao(img, teta):
+	rows, cols, canais = img.shape	
+	result = np.zeros((rows, cols, canais),np.uint8)
+
+	for i in range(rows):
+		for j in range(cols):
+			nX = int(i*math.cos(teta) - j*math.sin(teta))
+			nY = int(i*math.sin(teta) + j*math.cos(teta))
+
+			if(nX >= 0 and nX<rows and nY >= 0 and nY<cols):
+				result[nX, nY] = img[i,j]
+	return result
+
+
 ##############AMOSTRAGEM#################
 '''
+file = 'planta.jpg'
+img = cv2.imread(file, 0)
 ft = 2
 amostra = amostragem(img, ft)
 
@@ -158,6 +202,8 @@ cv2.destroyAllWindows()
 '''
 ##############QUANTIZACAO#################
 '''
+file = 'planta.jpg'
+img = cv2.imread(file, 0)
 k = 2
 quant = quantizacao(img, k)
 cv2.imshow('quantized', quant)
@@ -194,7 +240,7 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 '''
 ############ MISTURA ######################
-
+'''
 file1 = 'flor.jpg'
 img1 = cv2.imread(file1, 1)
 file2 = 'rogerinho.jpg'
@@ -202,5 +248,42 @@ img2 = cv2.imread(file2, 1)
 
 mist = mistura(img1, 0, img2, 5)
 cv2.imshow('mistura', mist)
+
+'''
+############ DISTANCIA EUCLIDIANA #########
+'''
+pontoA = [2,6]
+pontoB = [6,9]
+
+print(distanciaEuclidiana(pontoA, pontoB))
+'''
+########### TRANSLACAO ####################
+'''
+file = 'rogerinho.jpg'
+img = cv2.imread(file, 1)
+
+trans = translacao(img, [100, 200])
+cv2.imshow('translacao', trans)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+'''
+
+########### ESCALA ####################
+'''
+file = 'rogerinho.jpg'
+img = cv2.imread(file, 1)
+
+esc = escala(img, [1, 0.3])
+cv2.imshow('escala', esc)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+'''
+########### ROTACAO ####################
+
+file = 'rogerinho.jpg'
+img = cv2.imread(file, 1)
+
+rot = rotacao(img, math.radians(-45))
+cv2.imshow('rotacao', rot)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
