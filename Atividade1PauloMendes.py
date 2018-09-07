@@ -220,21 +220,21 @@ opLog = opLogicas(img1, img2, op)
 cv2.imwrite('ImagensResultantes/OPLOG_{op}.jpg'.format(op = op),opLog)
 '''
 #############OPERAÇÕES ARITMÉTICAS###########
-'''
-file1 = 'shape.jpg'
+
+file1 = 'CARD1.jpg'
 img1 = cv2.imread(file1, 1)
-file2 = 'rogerinho.jpg'
+file2 = 'CARD2.jpg'
 img2 = cv2.imread(file2, 1)
 
 #op = 'SOMA'
-#op = 'SUB'
+op = 'SUB'
 #op = 'MULT'
 #op = 'DIV'
 
 opArit = opAritmeticas(img1, img2, op)
 
 cv2.imwrite('ImagensResultantes/OP_ARIT_{op}.jpg'.format(op = op),opArit)
-'''
+
 ############ MISTURA ######################
 '''
 file1 = 'shape.jpg'
