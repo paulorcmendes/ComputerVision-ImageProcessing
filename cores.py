@@ -80,22 +80,37 @@ def RGBtoYIQ(imgRGB):
           
     return imgYIQ
 
+def segPele(imgYCrCb):
+    rows = imgYCrCb.shape[0]
+    cols = imgYCrCb.shape[1]
+    
+    img = np.zeros((rows, cols), np.uint8)
+    Y = R
+    Cr = G
+    Cb = B
+    for i in range(rows):
+        for j in range(cols):
+            if(85<=imgYCrCb[i,j][Cb] and imgYCrCb[i,j][Cb]<=135 and 135<=imgYCrCb[i,j][Cr] and imgYCrCb[i,j][Cr]<=180 and imgYCrCb[i,j][Y]>=80):
+                img[i,j] = 255
+    return img
+
 if not os.path.exists('Cores'):
     os.makedirs('Cores')
-img = cv2.imread("rogerinho.jpg", 1)
+img = cv2.imread("pele.jpg", 1)
 
-'''
-imgCMY = RGBtoCMY(img)
-cv2.imwrite("Cores/CMY.jpg", imgCMY)
 
-imgYUV = RGBtoYUV(img)
-cv2.imwrite("Cores/YUV.jpg", imgYUV)
+#imgCMY = RGBtoCMY(img)
+#cv2.imwrite("Cores/CMY.jpg", imgCMY)
+
+#imgYUV = RGBtoYUV(img)
+#cv2.imwrite("Cores/YUV.jpg", imgYUV)
 
 delta = 128
 #delta = 32768
 #delta = 0.5
 imgYCrCb = RGBtoYCrCb(img,delta)
-cv2.imwrite("Cores/YCrCb.jpg", imgYCrCb)
-'''
-imgYIQ = RGBtoYIQ(img)
-cv2.imwrite("Cores/YIQ.jpg", imgYIQ)
+#cv2.imwrite("Cores/YCrCb.jpg", imgYCrCb)
+cv2.imwrite("Cores/segpele.jpg", segPele(imgYCrCb))
+
+#imgYIQ = RGBtoYIQ(img)
+#cv2.imwrite("Cores/YIQ.jpg", imgYIQ)
