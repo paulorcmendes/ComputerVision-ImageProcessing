@@ -9,7 +9,7 @@ import numpy as np
 B = 0
 G = 1
 R = 2
-
+############De RGB para CMY#################
 def RGBtoCMY(imgRGB):
     rows = imgRGB.shape[0]
     cols = imgRGB.shape[1]
@@ -26,7 +26,7 @@ def RGBtoCMY(imgRGB):
             imgCMY[i,j][G] = M
             imgCMY[i,j][B] = Y
     return imgCMY
-
+############De RGB para YCrCb#################
 def RGBtoYCrCb(imgRGB, delta):
     rows = imgRGB.shape[0]
     cols = imgRGB.shape[1]
@@ -43,7 +43,7 @@ def RGBtoYCrCb(imgRGB, delta):
             imgYCrCb[i,j][G] = Cr
             imgYCrCb[i,j][B] = Cb
     return imgYCrCb
-
+############De RGB para YUV#################
 def RGBtoYUV(imgRGB):
     rows = imgRGB.shape[0]
     cols = imgRGB.shape[1]
@@ -61,7 +61,7 @@ def RGBtoYUV(imgRGB):
             imgYUV[i,j][B] = V        
           
     return imgYUV
-
+############De RGB para YIQ#################
 def RGBtoYIQ(imgRGB):
     rows = imgRGB.shape[0]
     cols = imgRGB.shape[1]
@@ -70,6 +70,11 @@ def RGBtoYIQ(imgRGB):
     
     for i in range(rows):
         for j in range(cols):
+            #Foi retirada a normalização, pois com ela a imagem ficava completamente escura.
+            #imgRGB[i,j][R] = imgRGB[i,j][R]/255
+            #imgRGB[i,j][G] = imgRGB[i,j][R]/255
+            #imgRGB[i,j][B] = imgRGB[i,j][R]/255
+            
             Y = 0.299*imgRGB[i,j][R] + 0.587*imgRGB[i,j][G]+0.114*imgRGB[i,j][B]
             I = 0.596*imgRGB[i,j][R] - 0.275*imgRGB[i,j][G]-0.321*imgRGB[i,j][B]
             Q = 0.212*imgRGB[i,j][R] - 0.523*imgRGB[i,j][G]+0.311*imgRGB[i,j][B]
@@ -80,37 +85,27 @@ def RGBtoYIQ(imgRGB):
           
     return imgYIQ
 
-def segPele(imgYCrCb):
-    rows = imgYCrCb.shape[0]
-    cols = imgYCrCb.shape[1]
-    
-    img = np.zeros((rows, cols), np.uint8)
-    Y = R
-    Cr = G
-    Cb = B
-    for i in range(rows):
-        for j in range(cols):
-            if(85<=imgYCrCb[i,j][Cb] and imgYCrCb[i,j][Cb]<=135 and 135<=imgYCrCb[i,j][Cr] and imgYCrCb[i,j][Cr]<=180 and imgYCrCb[i,j][Y]>=80):
-                img[i,j] = 255
-    return img
-
+###############MAIN########################
 if not os.path.exists('Cores'):
     os.makedirs('Cores')
-img = cv2.imread("pele.jpg", 1)
+img = cv2.imread("cores.jpg", 1)
 
 
-#imgCMY = RGBtoCMY(img)
-#cv2.imwrite("Cores/CMY.jpg", imgCMY)
+cv2.imwrite("Cores/RGB.jpg", img)
 
-#imgYUV = RGBtoYUV(img)
-#cv2.imwrite("Cores/YUV.jpg", imgYUV)
+imgCMY = RGBtoCMY(img.copy())
+cv2.imwrite("Cores/CMY.jpg", imgCMY)
 
+imgYUV = RGBtoYUV(img.copy())
+cv2.imwrite("Cores/YUV.jpg", imgYUV)
+
+#Para usar um delta diferente, basta descomentar o desejado.
 delta = 128
 #delta = 32768
 #delta = 0.5
-imgYCrCb = RGBtoYCrCb(img,delta)
-#cv2.imwrite("Cores/YCrCb.jpg", imgYCrCb)
-cv2.imwrite("Cores/segpele.jpg", segPele(imgYCrCb))
+imgYCrCb = RGBtoYCrCb(img.copy(),delta)
+cv2.imwrite("Cores/YCrCb.jpg", imgYCrCb)
 
-#imgYIQ = RGBtoYIQ(img)
-#cv2.imwrite("Cores/YIQ.jpg", imgYIQ)
+imgYIQ = RGBtoYIQ(img.copy())
+cv2.imwrite("Cores/YIQ.jpg", imgYIQ)
+
