@@ -45,7 +45,7 @@ def medianFilter(img, k):
 if not os.path.exists('Results'):
     os.makedirs('Results')
 ##############################BLUR#####################################
-
+'''
 file = 'rogerinho.jpg'
 img = cv2.imread(file, 0)
 
@@ -57,11 +57,11 @@ k = 5
 cv2.imwrite('Results/avgFilter_kernel_{k}_{k}{file}'.format(k = k, file = file), avgFilter(img, k))
 
 cv2.imwrite('Results/a_gaussian{file}'.format(file = file), gaussian(img))
-
+'''
 ##################################REMOCAO DE RUIDO######################
 file = 'flor.jpg'
 img = cv2.imread(file, 0)
 
 cv2.imwrite('Results/NOFILTER_original_{file}'.format(file = file), img)
-k = 5
+k = 7
 cv2.imwrite('Results/Median_kernel_{k}_{k}{file}'.format(k = k, file = file), medianFilter(img, k))
