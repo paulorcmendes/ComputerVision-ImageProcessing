@@ -1,0 +1,22 @@
+%YAML:1.0
+filename: "MCP_401_20160116_114245_00000000000000666776_.jpg"
+meter_type: D
+digits_value: 2359
+codebar_value: "1013-137441-6"
+digits_area: !!opencv-matrix
+   rows: 4
+   cols: 2
+   dt: i
+   data: [ 58, 263, 417, 292, 410, 384, 57, 360 ]
+codebar_area: !!opencv-matrix
+   rows: 4
+   cols: 2
+   dt: i
+   data: [ 316, 627, 619, 644, 612, 742, 316, 725 ]
+meter_area: !!opencv-matrix
+   rows: 4
+   cols: 2
+   dt: i
+   data: [ 1, 4, 720, 4, 720, 855, 1, 855 ]
+yearManufacture: 0
+numDigits: 0
