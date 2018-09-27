@@ -85,7 +85,7 @@ d = 255
 cv2.imwrite('Results/contraste_de{c}_{d}.jpg'.format(c = c, d = d), ajusteContraste(img, c, d)) 
 #correcao gama
 gama = 0.5
-cv2.imwrite('Results/gama{g}.jpg'.format(g = g), realceGama(img,gama))
+cv2.imwrite('Results/gama{g}.jpg'.format(g = gama), realceGama(img,gama))
 #realce linear
 G = 1
 D = 32

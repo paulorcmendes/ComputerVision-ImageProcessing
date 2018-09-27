@@ -40,24 +40,44 @@ def equalizeHistogram(img):
 def alongamentoHistograma(img, pLow, pHigh):
     rows, cols = img.shape
     nImg = np.zeros(img.shape)
+    maior = img.max()
+    menor = img.min()
     for i in range(rows):
         for j in range(cols):
             if img[i,j]<=pLow:
                 nImg[i,j] = 0
             elif pLow<img[i,j] and img[i,j]<pHigh:
-                nImg[i,j] = 255*(img[i,j]-img.min())/(img.max()-img.min())
+                nImg[i,j] = np.round(255*(img[i,j]-menor)/(maior-menor))
             else:
                 nImg[i,j] = 255
     return nImg
     
 ###################MAIN###################
-#############Equalização#################
+#############Original#################
 img = cv2.imread('image.jpg', 0)
-nImgEqualized = np.uint8(equalizeHistogram(img))
+hist = generateHistogram(img)
+
+x = np.arange(0, 256, 1)
+sub = plt.subplot()
+sub.bar(x, hist, 1, color = 'r')
+sub.set_title('Histograma Original')
+plt.show()
+#############Equalizacao#################
+nImgEqualized = np.uint8(equalizeHistogram(img.copy()))
 cv2.imwrite('HistogramaEqualizado.jpg', nImgEqualized)
+
+eqHist = generateHistogram(nImgEqualized)
+sub = plt.subplot()
+sub.bar(x, eqHist, 1, color = 'g')
+sub.set_title('Histograma Equalizado')
+plt.show()
+
 #############Alongamento#################
-img2 = cv2.imread('image2.jpg', 0)
-nImgAlongado = alongamentoHistograma(img2, 60, 180)
+nImgAlongado = np.uint8(alongamentoHistograma(img, 0, 255))
 cv2.imwrite('HistogramaAlongado.jpg', nImgAlongado)
 
-
+alongHist = generateHistogram(nImgAlongado)
+sub = plt.subplot()
+sub.bar(x, alongHist, 1, color = 'b')
+sub.set_title('Histograma Alongado')
+plt.show()
